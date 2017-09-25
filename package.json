@@ -1,0 +1,43 @@
+{
+  "name": "joureny-capture-service",
+  "version": "1.0.0",
+  "description": "IDScan- JourneyCaptureJS",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "gulp lint && gulp build && gulp test"
+  },
+  "repository": {},
+  "author": "IDScan",
+  "license": "MIT",
+  "homepage": "https://idscan.com",
+  "devDependencies": {
+    "assign": "^0.1.7",
+    "browser-sync": "^2.11.1",
+    "browserify": "^13.3.0",
+    "chai": "^3.5.0",
+    "gulp": "^3.9.1",
+    "gulp-istanbul": "^0.10.3",
+    "gulp-mocha": "^2.2.0",
+    "gulp-sourcemaps": "^1.12.0",
+    "gulp-tslint": "^4.3.2",
+    "gulp-typescript": "^2.14.1",
+    "gulp-uglify": "^1.5.4",
+    "gutil": "^1.6.4",
+    "run-sequence": "^1.1.5",
+    "tsify": "^3.0.3",
+    "tslint": "^3.3.0",
+    "typescript": "^1.7.5",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.9.0",
+    "@types/jquery": "2.0.47",
+    "es6-promise": "^3.1.2"
+  },
+  "dependencies": {
+    "jquery": "^2.2.4",
+    "typescript-collections": "^1.1.2"
+  }
+}
