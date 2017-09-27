@@ -2,14 +2,16 @@
 
 var gulp = require("gulp");
 var source = require('vinyl-source-stream');
-var sourcemaps = require('gulp-sourcemaps');
 var watchify = require('watchify');
 var browserify = require("browserify");
 var tsify = require("tsify");
-var buffer = require('vinyl-buffer');
-var uglify = require('gulp-uglify');
 var assign = require('lodash.assign');
 var gutil = require('gulp-util');
+
+var uglify = require('gulp-uglify');
+var buffer = require('vinyl-buffer');
+var sourcemaps = require('gulp-sourcemaps');
+
 
 
 
@@ -45,7 +47,7 @@ function bundle() {
 }
 
 
-
+gulp.task('temp', ['tsc']);
 
 // var ts = require("gulp-typescript");
 // gulp.task("tsc-gulp-typescript", function () {
