@@ -13,41 +13,50 @@ var buffer = require('vinyl-buffer');
 var sourcemaps = require('gulp-sourcemaps');
 
 
-
-
 var mainTsFilePath = "app/main.ts";
 var libraryName = "lib";
 var outputFileName = libraryName + ".js";
 var outputFolder = "built/";
 const tsConfig = require('./tsconfig.json');
 
-// add custom browserify options here
+
 var customOpts = {
     entries: [mainTsFilePath],
     debug: true
 };
 var opts = assign({}, watchify.args, customOpts);
-var watchifyObj = watchify(browserify(opts));
+var browserifyObj = browserify(opts).plugin("tsify", { project: "tsconfig.json" });
 
-// everything works just fine except one thing which is tsify gives an error /Cannot find name '$'/ 
-// but the result for compiling is giving working library 
-gulp.task('tsc', bundle); // so you can run `gulp js` to build the file
-watchifyObj.on('update', bundle); // on any dep update, runs the bundler
-watchifyObj.on('log', gutil.log); // output build logs to terminal
+
+gulp.task('serve-dev', ['serve-tsc']);
+gulp.task('serve-tsc', bundle);
 
 function bundle() {
-    return watchifyObj
-        .plugin("tsify", { project: "tsconfig.json" })
+    var watchedBrowserify = watchify(browserifyObj);
+    watchedBrowserify.on('update', bundle);
+    watchedBrowserify.on('log', gutil.log);
+
+    return watchedBrowserify
         .bundle()
         .on('error', gutil.log.bind(gutil, 'Browserify Error'))
         .pipe(source(outputFileName))
-        .pipe(buffer())
-        .pipe(sourcemaps.write('./')) // writes .map file
         .pipe(gulp.dest(outputFolder));
 }
 
 
-gulp.task('temp', ['tsc']);
+gulp.task('serve-build', ['build']);
+gulp.task("build", function () {
+    return browserifyObj
+        .bundle()
+        .pipe(source(outputFileName))
+        .pipe(buffer())
+        .pipe(sourcemaps.init({ loadMaps: true }))
+        .pipe(uglify())
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest("dist/"));
+});
+
+
 
 // var ts = require("gulp-typescript");
 // gulp.task("tsc-gulp-typescript", function () {

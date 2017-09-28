@@ -11,7 +11,7 @@ class helper {
         setTimeout(function () {
             $('#container').html('Good Morning...');
         }, 1000);
-        return a + b;
+        return a + b + 11;
     }
 
     promiseFunc(): JQueryPromise<boolean> {
