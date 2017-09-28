@@ -6,6 +6,12 @@
         "preserveConstEnums": true,
         "sourceMap": true,
         "moduleResolution": "node",
-        "module": "commonjs"
+        "module": "commonjs",
+        "lib": [
+            "dom",
+            "es5",
+            "scripthost",
+            "es2015.iterable"
+        ]
     }
 }

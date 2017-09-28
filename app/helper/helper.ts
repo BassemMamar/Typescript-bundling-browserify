@@ -1,3 +1,4 @@
+
 class helper {
 
     constructor() {
@@ -13,9 +14,9 @@ class helper {
         return a + b;
     }
 
-    // promiseFunc(): JQueryPromise<boolean> {
-    //     return null;
-    // }
+    promiseFunc(): JQueryPromise<boolean> {
+        return null;
+    }
 }
 
 

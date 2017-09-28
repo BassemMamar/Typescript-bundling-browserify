@@ -18,6 +18,7 @@
     "browser-sync": "^2.11.1",
     "browserify": "^13.3.0",
     "chai": "^3.5.0",
+    "es6-promise": "^3.1.2",
     "gulp": "^3.9.1",
     "gulp-istanbul": "^0.10.3",
     "gulp-mocha": "^2.2.0",
@@ -29,15 +30,13 @@
     "run-sequence": "^1.1.5",
     "tsify": "^3.0.3",
     "tslint": "^3.3.0",
-    "typescript": "^1.7.5",
+    "typescript": "^2.5.3",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.9.0",
-    "@types/jquery": "2.0.47",
-    "es6-promise": "^3.1.2"
+    "watchify": "^3.9.0"
   },
   "dependencies": {
-    "jquery": "^2.2.4",
-    "typescript-collections": "^1.1.2"
+    "@types/jquery": "^3.2.12",
+    "jquery": "^3.2.1"
   }
 }
