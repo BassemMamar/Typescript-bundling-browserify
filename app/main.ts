@@ -15,6 +15,6 @@ export class main {
 
 }
 
-var test = new main(1, 2);
-console.log('test.getSum()');
+var test = new main(5, 15);
+console.log('Hi there...');
 console.log(test.getSum());

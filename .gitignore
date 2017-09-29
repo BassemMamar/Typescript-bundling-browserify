@@ -80,5 +80,5 @@ Thumbs.db
 
 # Gulp generated files #
 ######################
-.tmp/
-dest/
+*.tmp
+*dest
