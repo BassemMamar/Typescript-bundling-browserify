@@ -76,3 +76,9 @@ journal
 ehthumbs.db
 Icon?
 Thumbs.db
+
+
+# Gulp generated files #
+######################
+.tmp/
+dest/
