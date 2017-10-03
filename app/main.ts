@@ -1,9 +1,7 @@
 import { helper } from "./helper/helper";
-/////<reference path="helper/helper.ts" />
 
 export class main {
     constructor(public firstNumber: number, public secondNumber: number) {
-
     }
 
     getSum() {

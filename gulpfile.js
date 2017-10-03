@@ -53,7 +53,6 @@ gulp.task('clean-build-dir', function (done) {
     clean(config.outputBuildDirectory, done);
 });
 
-
 gulp.task('clean', function (done) {
     clean(
         [
