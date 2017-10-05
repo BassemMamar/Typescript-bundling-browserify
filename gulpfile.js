@@ -14,8 +14,8 @@ var buffer = require('vinyl-buffer');
 var sourcemaps = require('gulp-sourcemaps');
 
 var browserifyObj = browserify(config.browserifyOptions)
-    .plugin("tsify", { project: config.tsconfig });
-
+    .plugin("tsify", { project: config.tsconfig })
+    .transform('brfs', { sourceMaps: false });
 
 gulp.task('serve-dev', ['serve-tsc']);
 gulp.task('serve-tsc', ['clean-dev-dir'], bundle);
@@ -25,11 +25,13 @@ gulp.task('clean-dev-dir', function (done) {
 });
 
 function bundle() {
+    //browserifyObj.transform('brfs', { sourceMaps: false });
     var watchedBrowserify = watchify(browserifyObj);
     watchedBrowserify.on('update', bundle);
     watchedBrowserify.on('log', gutil.log);
 
     return watchedBrowserify
+        //.transform('brfs-babel')
         .bundle()
         .on('error', gutil.log.bind(gutil, 'Browserify Error'))
         .pipe(source(config.outputFileName))
