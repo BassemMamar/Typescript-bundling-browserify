@@ -12,7 +12,6 @@ export class main {
 
     getSum() {
         console.log('getSum Func');
-
         let result = helper.sum(this.firstNumber, this.secondNumber);
         return result;
     }

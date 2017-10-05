@@ -1,5 +1,6 @@
 function config() {
     var mainTsEntryFilePath = "./app/main.ts";
+    var client = './app/';
     var temp = './.tmp/';
     var dest = './dest/';
     var outputFileName = 'lib.js';
@@ -17,7 +18,8 @@ function config() {
         outputBuildDirectory: dest,
         outputFileName: outputFileName,
         browserifyOptions: browserifyOptions,
-        tsconfig: tsconfig
+        tsconfig: tsconfig,
+        tsFiles: client + '**/*.ts'
     }
     return config;
 }

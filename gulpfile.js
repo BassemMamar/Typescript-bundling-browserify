@@ -23,14 +23,19 @@ gulp.task('serve-tsc', ['clean-dev-dir'], bundle);
 gulp.task('clean-dev-dir', function (done) {
     clean(config.outputDivDirectory, done);
 });
-
+// gulp.watch(config.tsFiles, ['serve-tsc']);
+var watchedBrowserify = undefined;
 function bundle() {
     //browserifyObj.transform('brfs', { sourceMaps: false });
-    var watchedBrowserify = watchify(browserifyObj);
-    watchedBrowserify.on('update', bundle);
-    watchedBrowserify.on('log', gutil.log);
+    console.log(typeof watchedBrowserify);
+    if (typeof watchedBrowserify === 'undefined') {
+        watchedBrowserify = watchify(browserifyObj);
+        watchedBrowserify.on('update', bundle);
+        watchedBrowserify.on('log', gutil.log);
+    }
 
     return watchedBrowserify
+        //  return browserifyObj
         //.transform('brfs-babel')
         .bundle()
         .on('error', gutil.log.bind(gutil, 'Browserify Error'))
