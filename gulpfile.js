@@ -45,7 +45,7 @@ function bundle() {
 
 
 gulp.task('serve-build', ['build']);
-gulp.task("build", ['clean-build-dir'], function () {
+gulp.task("build", ['generate-declaration-file'], function () {
     return browserifyObj
         .bundle()
         .pipe(source(config.outputFileName))
@@ -67,6 +67,24 @@ gulp.task('clean', function (done) {
             config.outputBuildDirectory
         ], done);
 });
+
+
+var ts = require("gulp-typescript");
+gulp.task("generate-declaration-file", ['clean-build-dir'],function () {
+    var tsResult = gulp.src(config.tsFiles)
+        .pipe(ts({
+            declaration: true,
+            noImplicitAny: true,
+            module: 'amd',
+            outFile: config.outputFileName
+        }));
+    //.pipe(tsProject());
+    return tsResult.dts.pipe(gulp.dest(config.outputBuildDirectory));
+
+    // return merge([tsResult.dts.pipe(gulp.dest("built")) ]);
+});
+
+
 
 /**
  * Delete all files in a given path
