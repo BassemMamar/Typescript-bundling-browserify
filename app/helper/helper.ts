@@ -6,15 +6,15 @@ class helper {
  
     constructor() {
      
-    } 
+    }    
 
     static sum(a: number, b: number) {
         var deferred = $.Deferred<void>();
 
-        setTimeout(function () {
+       setTimeout(function () {
             $('#container').html(src);
-            $('#container').append('Done...');
-        }, 1000);
+            $('#container').append('Done with sync .....');
+       }, 1000);
         return a + b;
     }
 

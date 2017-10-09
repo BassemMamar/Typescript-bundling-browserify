@@ -9,7 +9,7 @@ export class main {
         console.log('test ', src);
         console.log('style content', stl);
     }
-
+  
     getSum() {
         console.log('getSum Func');
         let result = helper.sum(this.firstNumber, this.secondNumber);

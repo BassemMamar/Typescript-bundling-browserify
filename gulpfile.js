@@ -1,6 +1,9 @@
 "use strict";
 var gulp = require("gulp");
 var del = require("del");
+var webserver = require('gulp-webserver')
+var inject = require('gulp-inject');
+
 var config = require("./gulp.config.js")();
 
 var source = require('vinyl-source-stream');
@@ -17,7 +20,22 @@ var browserifyObj = browserify(config.browserifyOptions)
     .plugin("tsify", { project: config.tsconfig })
     .transform('brfs', { sourceMaps: false });
 
-gulp.task('serve-dev', ['serve-tsc']);
+gulp.task('index-inject', ['serve-tsc'], function (func) {
+    var sources = gulp.src(['./.tmp/lib.js'], { read: false });
+
+    return gulp.src('./index.html')
+        .pipe(inject(sources))
+        .pipe(gulp.dest('.'));
+});
+
+gulp.task('serve-dev', ['index-inject'],function(func){
+      gulp.src('.')
+        .pipe(webserver({
+            livereload: true,
+            open: true,
+        }));
+});
+
 gulp.task('serve-tsc', ['clean-dev-dir'], bundle);
 
 gulp.task('clean-dev-dir', function (done) {
@@ -25,12 +43,12 @@ gulp.task('clean-dev-dir', function (done) {
 });
 // gulp.watch(config.tsFiles, ['serve-tsc']);
 var watchedBrowserify = undefined;
-function bundle() {
+function bundle(func) {
     //browserifyObj.transform('brfs', { sourceMaps: false });
-    console.log(typeof watchedBrowserify);
     if (typeof watchedBrowserify === 'undefined') {
         watchedBrowserify = watchify(browserifyObj);
         watchedBrowserify.on('update', bundle);
+        watchedBrowserify.on('end', func);
         watchedBrowserify.on('log', gutil.log);
     }
 
@@ -70,7 +88,7 @@ gulp.task('clean', function (done) {
 
 
 var ts = require("gulp-typescript");
-gulp.task("generate-declaration-file", ['clean-build-dir'],function () {
+gulp.task("generate-declaration-file", ['clean-build-dir'], function () {
     var tsResult = gulp.src(config.tsFiles)
         .pipe(ts({
             declaration: true,
@@ -83,8 +101,6 @@ gulp.task("generate-declaration-file", ['clean-build-dir'],function () {
 
     // return merge([tsResult.dts.pipe(gulp.dest("built")) ]);
 });
-
-
 
 /**
  * Delete all files in a given path
