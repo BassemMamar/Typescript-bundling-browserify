@@ -15,9 +15,11 @@ Install these NPM packages globally:
 
 ## Running
 
-Type `gulp serve-dev` to compile `ts` files and watch any changes to re-compile
+Type `gulp serve-dev` to compile `ts` files, watch any changes to re-compile and lunch the index page in the browser
 
-Type `gulp serve-build` to compile `ts` files into one `lib.js` file in the `dest` folder
+Type `gulp serve-build` to compile `ts` files into one `lib.js` file in the `dest` folder and lunch the index page in the browser
+
+Type `gulp build` to compile `ts` files into one `lib.js` file in the `dest` folder
 
 
 # References

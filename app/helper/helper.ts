@@ -13,7 +13,7 @@ class helper {
 
        setTimeout(function () {
             $('#container').html(src);
-            $('#container').append('Done with sync .....');
+            $('#container').append('Done with sync.');
        }, 1000);
         return a + b;
     }

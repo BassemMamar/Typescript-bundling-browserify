@@ -1,35 +1,33 @@
 "use strict";
 var gulp = require("gulp");
-var del = require("del");
-var webserver = require('gulp-webserver')
-var inject = require('gulp-inject');
-
 var config = require("./gulp.config.js")();
-
+var del = require("del");
+var ts = require("gulp-typescript");
+var inject = require('gulp-inject');
 var source = require('vinyl-source-stream');
 var watchify = require('watchify');
 var browserify = require("browserify");
 var tsify = require("tsify");
 var gutil = require('gulp-util');
-
 var uglify = require('gulp-uglify');
 var buffer = require('vinyl-buffer');
 var sourcemaps = require('gulp-sourcemaps');
+var webserver = require('gulp-webserver');
 
+var watchedBrowserify = undefined;
 var browserifyObj = browserify(config.browserifyOptions)
     .plugin("tsify", { project: config.tsconfig })
     .transform('brfs', { sourceMaps: false });
 
-gulp.task('index-inject', ['serve-tsc'], function (func) {
-    var sources = gulp.src(['./.tmp/lib.js'], { read: false });
+gulp.task('serve-dev', ['serve-tsc'], function (func) {
+    var sources = gulp.src([config.temp + config.outputFileName], { read: false });
 
-    return gulp.src('./index.html')
+    // inject file in the html page
+    gulp.src(config.html)
         .pipe(inject(sources))
-        .pipe(gulp.dest('.'));
-});
+        .pipe(gulp.dest(config.root));
 
-gulp.task('serve-dev', ['index-inject'],function(func){
-      gulp.src('.')
+    return gulp.src(config.root)
         .pipe(webserver({
             livereload: true,
             open: true,
@@ -41,10 +39,8 @@ gulp.task('serve-tsc', ['clean-dev-dir'], bundle);
 gulp.task('clean-dev-dir', function (done) {
     clean(config.outputDivDirectory, done);
 });
-// gulp.watch(config.tsFiles, ['serve-tsc']);
-var watchedBrowserify = undefined;
+
 function bundle(func) {
-    //browserifyObj.transform('brfs', { sourceMaps: false });
     if (typeof watchedBrowserify === 'undefined') {
         watchedBrowserify = watchify(browserifyObj);
         watchedBrowserify.on('update', bundle);
@@ -53,16 +49,26 @@ function bundle(func) {
     }
 
     return watchedBrowserify
-        //  return browserifyObj
-        //.transform('brfs-babel')
         .bundle()
         .on('error', gutil.log.bind(gutil, 'Browserify Error'))
         .pipe(source(config.outputFileName))
         .pipe(gulp.dest(config.outputDivDirectory));
 }
 
+gulp.task('serve-build', ['build'], function () {
+    var sources = gulp.src([config.outputBuildDirectory + config.outputFileName], { read: false });
 
-gulp.task('serve-build', ['build']);
+    gulp.src(config.html)
+        .pipe(inject(sources))
+        .pipe(gulp.dest(config.root));
+
+    return gulp.src(config.root)
+        .pipe(webserver({
+            livereload: true,
+            open: true,
+        }));
+});
+
 gulp.task("build", ['generate-declaration-file'], function () {
     return browserifyObj
         .bundle()
@@ -72,6 +78,18 @@ gulp.task("build", ['generate-declaration-file'], function () {
         .pipe(uglify())
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(config.outputBuildDirectory));
+});
+
+gulp.task("generate-declaration-file", ['clean-build-dir'], function () {
+    var tsResult = gulp.src(config.tsFiles)
+        .pipe(ts({
+            declaration: true,
+            noImplicitAny: true,
+            module: 'amd',
+            outFile: config.outputFileName
+        }));
+
+    return tsResult.dts.pipe(gulp.dest(config.outputBuildDirectory));
 });
 
 gulp.task('clean-build-dir', function (done) {
@@ -86,21 +104,6 @@ gulp.task('clean', function (done) {
         ], done);
 });
 
-
-var ts = require("gulp-typescript");
-gulp.task("generate-declaration-file", ['clean-build-dir'], function () {
-    var tsResult = gulp.src(config.tsFiles)
-        .pipe(ts({
-            declaration: true,
-            noImplicitAny: true,
-            module: 'amd',
-            outFile: config.outputFileName
-        }));
-    //.pipe(tsProject());
-    return tsResult.dts.pipe(gulp.dest(config.outputBuildDirectory));
-
-    // return merge([tsResult.dts.pipe(gulp.dest("built")) ]);
-});
 
 /**
  * Delete all files in a given path
