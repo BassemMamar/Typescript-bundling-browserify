@@ -31,6 +31,8 @@ gulp.task('serve-dev', ['serve-tsc'], function (func) {
         .pipe(webserver({
             livereload: true,
             open: true,
+            port:3500
+
         }));
 });
 
